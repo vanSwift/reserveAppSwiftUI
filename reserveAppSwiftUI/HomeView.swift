@@ -14,47 +14,75 @@ struct HomeView: View {
     
     @State private var date: Date = .init()
     @State private var week: [Date.WeekDay] = []
+    @State private var weeks: [[Date.WeekDay]] = []
+    @State private var createWeek: Bool = true
     @State var chosenDayId: UUID?
+    @State var currentWeekIndex = 1
     
     var body: some View {
         VStack(alignment: .leading, spacing: 0) {
-            HStack(spacing: 0) {
-                Text(date.format(format: "MMMM"))
-                    .font(.title)
-                    .foregroundStyle(.blue)
-                    .fontWeight(.bold)
-                Text(date.format(format: "YYYY"))
-                    .font(.title)
-                    .foregroundStyle(.gray)
-                    .fontWeight(.bold)
-                    .padding(.horizontal, 5)
-            }
-            
-            Text(date.format(format: "EEEE, d MMMM, yyyy"))
-                .font(.caption)
-                .fontWeight(.medium)
-                .foregroundStyle(.gray)
-                .padding(.vertical, 5)
-                .onAppear { week.append(contentsOf: date.fetchWeek())
+            Header()
+                .padding(.horizontal)
+                .foregroundStyle(.white)
+                .onAppear {
+                    week = date.fetchWeek()
+                    if let firstDay = week.first?.date{
+                        weeks.append(firstDay.createPreviousWeek())
+                        weeks.append(week)
+                        if let lastDay = week.last?.date{
+                            weeks.append(lastDay.createNextWeek())
+                        }
+                    }
                 }
 
-            SliderView()
+            TabView(selection: $currentWeekIndex) {
+                ForEach(weeks.indices, id: \.self){ index in
+                    SliderView(week: weeks[index])
+                }
+            }
+            .tabViewStyle(PageTabViewStyle(indexDisplayMode: .never))
+            .frame(maxWidth: .infinity)
+            .foregroundStyle(.white)
+            Spacer()
             
             ScrollView(.vertical) {
             
             }
-        }
-        .padding()
+        }.background(.main)
+        
     }
     
     @ViewBuilder
-    func SliderView() -> some View {
+    func Header() -> some View {
+        HStack(spacing: 0) {
+        Text(date.format(format: "MMMM"))
+            .font(.title)
+            .foregroundStyle(.blue)
+            .fontWeight(.bold)
+        Text(date.format(format: "YYYY"))
+            .font(.title)
+            .foregroundStyle(.gray)
+            .fontWeight(.bold)
+            .padding(.horizontal, 5)
+    }
+    
+    Text(date.format(format: "EEEE, d MMMM, yyyy"))
+        .font(.caption)
+        .fontWeight(.medium)
+        .foregroundStyle(.gray)
+        .padding(.vertical, 5)
+        .onAppear { week.append(contentsOf: date.fetchWeek())
+        }}
+    
+    @ViewBuilder
+    func SliderView(week: [Date.WeekDay]) -> some View {
         HStack(alignment: .center, spacing: 0) {
             ForEach(week, id: \.id) { day in
                 VStack(alignment: .center, spacing: 0) {
                     Text(day.date.format(format: "EE"))
                         .fontWeight(.medium)
                     Text(day.date.format(format: "d"))
+                        .padding(.vertical, 10)
                         .onAppear {
                             if day.date.isToday {
                                 chosenDayId = day.id
@@ -63,6 +91,7 @@ struct HomeView: View {
                         .padding(.vertical, 10)
                         .fontWeight(.bold)
                         .onTapGesture {
+                            
                             chosenDayId = day.id
                         }
                         .foregroundStyle(
@@ -84,26 +113,43 @@ struct HomeView: View {
                 .foregroundStyle(.gray)
                 .frame(maxWidth: .infinity)
                 .padding(.vertical, 20)
+                .offset(y: -130)
+                
             }
         }
-//        .gesture(
-//            DragGesture().onEnded { value in
-//                if value.translation.width < 0 {
-//                    // Смахивание вправо
-//                    if let lastWeek = weeks.wrappedValue.last {
-//                        weeks.wrappedValue.insert(lastWeek.createNextWeek(), at: 0)
-//                        weeks.wrappedValue.removeLast()
-//                    }
-//                } else if value.translation.width > 0 {
-//                    // Смахивание влево
-//                    if let firstWeek = weeks.wrappedValue.first {
-//                        weeks.wrappedValue.append(firstWeek.createPreviousWeek())
-//                        weeks.wrappedValue.removeFirst()
-//                    }
-//                }
-//            }
-//        )
+        .background{GeometryReader{ proxy in
+            let minX = proxy.frame(in: .global).minX
+            Color
+                .clear
+                .preference(key: OffsetKey.self, value: minX)
+                .onPreferenceChange (OffsetKey.self){ value in
+                    if value.rounded() == 15 && createWeek{
+                        paginateWeek()
+                    }
+                }
+            
+        }
+        }
+    
+        
     }
+    func paginateWeek(){
+        if weeks.indices.contains(currentWeekIndex){
+            if let firstDate = weeks[currentWeekIndex].first?.date,
+               currentWeekIndex == 0{
+                weeks.insert(firstDate.createPreviousWeek(), at: 0)
+                weeks.removeLast()
+                currentWeekIndex = 1
+            }
+        }
+        if let lastDate = weeks[currentWeekIndex].last?.date,
+           currentWeekIndex == weeks.count - 1{
+            weeks.append(lastDate.createNextWeek())
+            currentWeekIndex = weeks.count - 2
+            
+        }
+    }
+    
 }
 
 
