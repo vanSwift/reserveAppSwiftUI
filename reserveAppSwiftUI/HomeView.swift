@@ -24,6 +24,7 @@ struct HomeView: View {
             Header()
                 .padding(.horizontal)
                 .foregroundStyle(.white)
+                
                 .onAppear {
                     week = date.fetchWeek()
                     if let firstDay = week.first?.date{
@@ -64,6 +65,16 @@ struct HomeView: View {
             .foregroundStyle(.gray)
             .fontWeight(.bold)
             .padding(.horizontal, 5)
+            Spacer()
+            
+        Image("avatar")
+            .resizable()
+            .scaledToFill()
+            .frame(width: 55, height: 55)
+            .clipShape(Circle())
+            .overlay(Circle().stroke(Color.blue.opacity(0.9),lineWidth: 1))
+                    
+            
     }
     
     Text(date.format(format: "EEEE, d MMMM, yyyy"))
@@ -100,7 +111,13 @@ struct HomeView: View {
                             if day.id == chosenDayId {
                                 Circle().frame(width: 36, height: 36)
                                     .foregroundStyle(.blue)
+                                
                             }
+                            else{Circle()
+                                    .stroke(Color.gray.opacity(0.2))
+                                    .frame(width: 36, height: 36)
+                                    //.foregroundStyle(.gray)
+                                    }
                             if day.date.isToday {
                                 Circle()
                                     .frame(width: 6, height: 6)

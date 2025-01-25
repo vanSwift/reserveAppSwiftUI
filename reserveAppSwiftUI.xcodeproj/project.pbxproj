@@ -8,11 +8,13 @@
 
 /* Begin PBXBuildFile section */
 		29E8FE412D43D8F500E0D70C /* prefference.swift in Sources */ = {isa = PBXBuildFile; fileRef = 29E8FE402D43D8F500E0D70C /* prefference.swift */; };
+		29E8FE432D43EB7900E0D70C /* Timeslot.swift in Sources */ = {isa = PBXBuildFile; fileRef = 29E8FE422D43EB7900E0D70C /* Timeslot.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
 		29BED17E2D4116DF0094FF27 /* reserveAppSwiftUI.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = reserveAppSwiftUI.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		29E8FE402D43D8F500E0D70C /* prefference.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = prefference.swift; sourceTree = "<group>"; };
+		29E8FE422D43EB7900E0D70C /* Timeslot.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Timeslot.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFileSystemSynchronizedRootGroup section */
@@ -37,6 +39,7 @@
 		29BED1752D4116DF0094FF27 = {
 			isa = PBXGroup;
 			children = (
+				29E8FE422D43EB7900E0D70C /* Timeslot.swift */,
 				29E8FE402D43D8F500E0D70C /* prefference.swift */,
 				29BED1802D4116DF0094FF27 /* reserveAppSwiftUI */,
 				29BED17F2D4116DF0094FF27 /* Products */,
@@ -125,6 +128,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				29E8FE432D43EB7900E0D70C /* Timeslot.swift in Sources */,
 				29E8FE412D43D8F500E0D70C /* prefference.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
