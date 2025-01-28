@@ -44,11 +44,23 @@ struct HomeView: View {
             .tabViewStyle(PageTabViewStyle(indexDisplayMode: .never))
             .frame(maxWidth: .infinity)
             .foregroundStyle(.white)
-            Spacer()
+            
             
             ScrollView(.vertical) {
-            
+                VStack(spacing: 19){
+                    ForEach(Timeslot.mockData){ slot in
+                        TimeslotCell(observed: .init(timeslot: slot))
+                            
+                                                
+                    }
+                    
+                }
+                .padding(.vertical)
             }
+            .scrollIndicators(.hidden)
+            .frame(height: 400)
+             .offset(y: -240)
+            
         }.background(.main)
         
     }

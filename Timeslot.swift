@@ -22,6 +22,7 @@ class Timeslot: Identifiable{
 }
 
 extension Timeslot{
+    static var userId = UUID()
     static var masterId = UUID()
     static var mockData: [Timeslot] = [Timeslot(startTime: .init(timeIntervalSince1970: 1), masterId: masterId),
                                        Timeslot(startTime: .init(timeIntervalSince1970: 2), masterId: masterId),

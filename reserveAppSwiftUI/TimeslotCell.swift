@@ -11,14 +11,16 @@ import SwiftUI
 struct TimeslotCell: View {
     @State var observed: Observed
     var body: some View {
-        VStack(alignment:.leading, spacing: 13) {
+        VStack(alignment:.leading, spacing: 5) {
             Text(observed.timeLable )
+                .fontWeight(.bold)
+                .font(.title3)
+
+            Text(observed.isFreeDescription)
         }
-        .fontWeight(.bold)
-        .font(.title3)
         .padding()
         .frame(maxWidth: .infinity,alignment: .leading)
-        .background(Color.greenstatus)
+        .background(observed.bgColor)
         .clipShape(RoundedRectangle(cornerRadius: 15 ))
         
         .offset(x: 60)
@@ -34,6 +36,26 @@ extension TimeslotCell{
         init(timeslot: Timeslot) {
             self.timeslot = timeslot
         }
+        
+                
+        var isFreeDescription: String{
+            guard timeslot.clientId != nil else {
+                return "Час вільний!"
+            }
+            if timeslot.clientId == Timeslot.userId{
+                return "Ви записани на цей час"
+            }
+            else{
+               return "Час зайнятий"
+            }
+        }
+        var bgColor: Color  {
+            if timeslot.clientId == nil{
+                return .greenstatus
+            }
+            return timeslot.clientId == Timeslot.userId ? .yellowstatus : .orangestatus
+        }
+
     }
 }
 
