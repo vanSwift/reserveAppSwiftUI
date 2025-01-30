@@ -16,7 +16,7 @@ struct RouteView: View {
             HomeView().background(.main)
         }
         else{
-            AuthPage(roteObserved: observed)
+            AuthPage(routeObserved: observed)
         }
     }
 }

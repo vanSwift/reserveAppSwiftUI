@@ -72,7 +72,8 @@ struct AuthPage: View {
     @State private var password = ""
     @State private var confirmPassword = ""
     @State var isAuth: Bool = true
-    @Bindable var roteObserved: RouteView.Observed
+    @Bindable var routeObserved: RouteView.Observed
+    @State private var observed: Observed = Observed()
     var body: some View {
         
         VStack {
@@ -89,7 +90,13 @@ struct AuthPage: View {
                     LeafeTextField(title: "Підтвердіть ваш пароль", isSecure: true, text: $confirmPassword)
                 }
                 Button{
-                    roteObserved.appState = .authorized
+                    if isAuth{
+                        observed.auth(email: email, password: password)
+                    }
+                    else{
+                        observed.signUp(email: email, password: password, confirm: confirmPassword)
+                    }
+                    routeObserved.appState = .authorized
                 } label: {
                         UnevenRoundedRectangle(cornerRadii: .init(topLeading: 25, bottomLeading: 0, bottomTrailing: 25, topTrailing: 0))
                         .foregroundStyle(.blueButton)
